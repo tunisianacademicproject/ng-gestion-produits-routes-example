@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { ProduitsComponent } from './produits/produits.component';
 import { AjoutProduitComponent } from './ajout-produit/ajout-produit.component';
-
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,7 +16,8 @@ import { AjoutProduitComponent } from './ajout-produit/ajout-produit.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,7 @@
+<!-- produits.component.html -->
 <div>
-  <h1> liste des produits </h1>
-  <!-- <app-entete></app-entete> -->
+  <h1> Liste des produits </h1>
+
   <table>
     <thead>
       <tr>
@@ -8,6 +9,7 @@
         <th> Code </th>
         <th> Designation </th>
         <th> Prix </th>
+        <th> Actions </th>
       </tr>
     </thead>
     <tbody>
@@ -16,7 +18,28 @@
         <td> {{p.code}}</td>
         <td> {{p.designation}}</td>
         <td> {{p.prix}}</td>
+        <td>
+          <button (click)="editerProduit(p)">Éditer</button>
+          <button (click)="supprimerProduit(p)">Supprimer</button>
+        </td>
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="produitEnEdition">
+    <h2>{{produitEnEdition.id ? 'Modifier' : 'Ajouter'}} un produit</h2>
+<form (submit)="produitEnEdition.id ? mettreAJourProduit($event) : ajouterProduit($event)">
+  <label for="id">Id:</label>
+  <input type="text" id="id" [(ngModel)]="nouveauProduit.id" required [ngModelOptions]="{standalone: true}">
+  <label for="code">Code:</label>
+  <input type="text" id="code" [(ngModel)]="nouveauProduit.code" required [ngModelOptions]="{standalone: true}">
+  <label for="designation">Désignation:</label>
+  <input type="text" id="designation" [(ngModel)]="nouveauProduit.designation" required [ngModelOptions]="{standalone: true}">
+  <label for="prix">Prix:</label>
+  <input type="number" id="prix" [(ngModel)]="nouveauProduit.prix" required [ngModelOptions]="{standalone: true}">
+  <button type="submit">{{produitEnEdition.id ? 'Mettre à jour' : 'Ajouter'}}</button>
+  <button type="button" (click)="annulerEdition()">Annuler</button>
+</form>
+
+  </div>
 </div>

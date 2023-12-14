@@ -1,1 +1,13 @@
-<p>ajout-produit works!</p>
+<!-- ajout-produit.component.html -->
+<div>
+  <h2>Ajouter un produit</h2>
+  <form (submit)="ajouterProduit()">
+    <label for="code">Code:</label>
+    <input type="text" id="code" [(ngModel)]="nouveauProduit.code" required>
+    <label for="designation">Désignation:</label>
+    <input type="text" id="designation" [(ngModel)]="nouveauProduit.designation" required>
+    <label for="prix">Prix:</label>
+    <input type="number" id="prix" [(ngModel)]="nouveauProduit.prix" required>
+    <button type="submit">Ajouter</button>
+  </form>
+</div>
