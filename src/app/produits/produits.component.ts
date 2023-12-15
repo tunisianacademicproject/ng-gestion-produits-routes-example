@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Produit} from '../model/produit';
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-produits',
   templateUrl: './produits.component.html',
@@ -11,47 +12,57 @@ produits: Array<Produit> = [
 {id:2,code:'y4',designation:"table en bois",prix:100},
 {id:3,code:'y10',designation:"salon en cuir",prix:3000}
 ];
- produitEnEdition: Produit | null = null;
-  nouveauProduit: Produit = { id: 0, code: '', designation: '', prix: 0 };
-
-
-
-
-  editerProduit(produit: Produit): void {
-    this.produitEnEdition = { ...produit };
-    console.log(this.produitEnEdition);
+produitCourant = new Produit();
+supprimerProduit(p: Produit){
+  //Afficher une boite de dialogue pour confirmer la suppression
+  let reponse:boolean =confirm("Voulez vous supprimer le produit :"+p.designation+" ?");
+  if (reponse==true)
+  {
+    console.log("Suppression confirmée..." );
+    //chercher l'indice du produit à supprimer
+    let index: number = this.produits.indexOf(p);
+    console.log("indice du produit à supprimer: "+index);
+    if (index !== -1)
+    {
+    // supprimer le produit référencé
+    this.produits.splice(index, 1);
+    }
   }
-
-
-  annulerEdition(): void {
-    this.produitEnEdition = null;
+  else
+  {
+  console.log("Suppression annulée..." );
   }
+}
 
-  supprimerProduit(produit: Produit): void {
-    const index = this.produits.indexOf(produit);
-    if (index !== -1) {
-      this.produits.splice(index, 1);
-      this.produitEnEdition = null; // Reset the edited product
+validerFormulaire(form: NgForm) {
+    if (form.value.id !== undefined) {
+      const existingProduct = this.produits.find(p => p.id === form.value.id);
+      if (existingProduct) {
+        const confirmation = confirm("Un produit avec cet ID existe déjà. Voulez-vous le mettre à jour?");
+        if (confirmation) {
+          existingProduct.code = form.value.code;
+          existingProduct.designation = form.value.designation;
+          existingProduct.prix = form.value.prix;
+          console.log("Produit mis à jour :", existingProduct);
+        } else {
+          console.log("Mise à jour annulée...");
+        }
+      } else {
+        console.log("Nouveau produit ajouté :", form.value);
+        this.produits.push(form.value);
+      }
+    } else {
+      console.log("ID vide...");
     }
   }
 
-  mettreAJourProduit(event: Event): void {
-  event.preventDefault(); // Prevent the default form submission behavior
-  if (this.produitEnEdition) {
-    const index = this.produits.findIndex(p => p.id === this.produitEnEdition?.id);
-    if (index !== -1) {
-      this.produits[index] = { ...this.produitEnEdition };
-      this.produitEnEdition = null;
-    }
+  annulerSaisie() {
+    this.produitCourant = new Produit();
   }
+
+  editerProduit(p: Produit) {
+    this.produitCourant = p;
+  }
+
 }
 
-ajouterProduit(event: Event): void {
-  event.preventDefault(); // Prevent the default form submission behavior
-  // Assuming that id is unique, generate a new id for the product
-  this.nouveauProduit.id = this.produits.length + 1;
-  this.produits.push({ ...this.nouveauProduit });
-  // Reset the form
-  this.nouveauProduit = { id: 0, code: '', designation: '', prix: 0 };
-}
-}
